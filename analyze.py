@@ -1,9 +1,10 @@
 import sqlite3, sys
+from contacts import searchByPhone 
 path = sys.argv[1]
 conn = sqlite3.connect(path)
 c = conn.cursor()
 threads = {}
-handle_idToid = {0: "me"}
+handle_idToid = {0: "+15083530126"}
 chats = {}
 messageToChat = {}
 for row in c.execute('SELECT rowid,id  FROM handle'):
@@ -35,5 +36,21 @@ for row in c.execute("SELECT ROWID, handle_id, is_from_me from message"):
 #       messageCount, = c.execute('SELECT count(*) FROM message where handle_id=?',(i,)).fetchone()
 #       threads[value] = messageCount
 import json
+nameThreads = {}
+handle_idToName = {}
+for key, value in threads.items():
+    lookup = searchByPhone(key[-4:])
+    i = 0
+    newLookup = lookup
+    while newLookup in nameThreads:
+        newLookup = lookup + str(i)
+    nameThreads[lookup if lookup else key] = value
+    if lookup:
+        handle_idToName[key] = lookup
+
+for key, value in chats.items():
+    for handler in value:
+        if handler['number'] in handle_idToName:
+            handler['name'] = handle_idToName[handler['number']]
 with open('output.json', 'w') as fp:
-    json.dump({"threads": threads, "chats": chats}, fp)
+    json.dump({"threads": nameThreads, "chats": chats}, fp)
