@@ -1,8 +1,6 @@
 import objc
 import AddressBook as ab
 
-import pprint as pp
-
 def pythonize(objc_obj):
     if isinstance(objc_obj, objc.pyobjc_unicode):
         return str(objc_obj)
@@ -27,7 +25,15 @@ def ab_person_to_dict(person, skip=None):
 
 def searchByPhone(phone):
     address_book = ab.ABAddressBook.sharedAddressBook()
-    keys = [None, ab.kABPhoneHomeLabel,ab.kABPhoneMainLabel, ab.kABPhoneMobileLabel, ab.kABPhoneWorkLabel,ab.kABPhoneiPhoneLabel, ab.kABHomeLabel, ab.kABWorkLabel, ab.kABOtherLabel]
+    keys = [None, 
+    ab.kABPhoneHomeLabel,
+    ab.kABPhoneMainLabel, 
+    ab.kABPhoneMobileLabel, 
+    ab.kABPhoneWorkLabel,
+    ab.kABPhoneiPhoneLabel, 
+    ab.kABHomeLabel, 
+    ab.kABWorkLabel, 
+    ab.kABOtherLabel]
     criteria = []
     for label in keys:
         criteria.append(ab.ABPerson.searchElementForProperty_label_key_value_comparison_(
