@@ -67,11 +67,11 @@ def outputWithContacts():
         nameThreads[lookup if lookup else key] = value
         if lookup:
             handle_idToName[key] = lookup
-
     for key, value in chats.items():
         for handler in value:
             if handler['number'] in handle_idToName:
                 handler['name'] = handle_idToName[handler['number']]
+            handler['attachment_count'] = len(handler['attachments'])
     with open('output.json', 'w') as fp:
         json.dump({"threads": nameThreads, "chats": chats}, fp)
 outputWithContacts()
